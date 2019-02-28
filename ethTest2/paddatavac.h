@@ -5,6 +5,7 @@
 #include <tins/hw_address.h>
 #include <vector>
 #include <bitset>
+#include <iostream>
 
 
 namespace PADspace
@@ -30,11 +31,11 @@ public:
 
     int pixbytes = (64+12)*4;
 
-    void getBank(int loc_in_packet ,int analogoffset_in_bank, uint16_t*, uint32_t*);
-    void getBank(int loc_in_packet,int analogoffset_in_bank, int  digitaloffset_in_bank, uint16_t*, uint32_t*);
-    void getFrame(int analogoffset_in_bank, uint16_t*, uint32_t*);
-    void getFrame(int analogoffset_in_bank, int digitaloffset_in_bank, uint16_t*, uint32_t*);
-    void getFrame(uint16_t*, uint32_t*);
+    int getBank(int loc_in_packet ,int analogoffset_in_bank, uint16_t*, uint32_t*);
+    int getBank(int loc_in_packet,int analogoffset_in_bank, int  digitaloffset_in_bank, uint16_t*, uint32_t*);
+    int getFrame(int analogoffset_in_bank, uint16_t*, uint32_t*);
+    int getFrame(int analogoffset_in_bank, int digitaloffset_in_bank, uint16_t*, uint32_t*);
+    int getFrame(uint16_t*, uint32_t*);
     void nextFrame();
 
 };
