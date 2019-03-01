@@ -11,6 +11,7 @@ PADspace::PADdataVac::PADdataVac()
     inputbuff.clear();
     inputbuff.reserve(1257);
     sniffy = new Tins::Sniffer("eth0",sniffconfig);
+    frameCount = 0;
 
 }
 
@@ -40,6 +41,7 @@ void PADspace::PADdataVac::getBank(int loc, int aoffsetin, uint16_t *abank, uint
         *(abank+i)|=((uint32_t(inputbuff[j*4+3])&0xFF));
 
        // std::cout<<"j"<< j*4+3 << ", k: "<< k*4+2 << "i: "<< i <<std::endl;
+         std::cout<<j*4<<std::endl;
 
     }
 }
@@ -76,8 +78,8 @@ void PADspace::PADdataVac::getBank(int loc, int aoffsetin, int doffsetin, uint16
         *(dbank+i)|=((uint32_t(inputbuff[k*4+2])&(0xC0))>>6);
         *(abank+i)|=((uint32_t(inputbuff[j*4+2])&(0x3F))<<8);
         *(abank+i)|=((uint32_t(inputbuff[j*4+3])&0xFF));
-       //std::cout<<"j"<< j*4+3 << ", k: "<< k*4+2 << "i: "<< i <<std::endl;
-
+       //std::cout<<"j"<< j*4+3 << ", k: "<< k*4+2 << "i: "<< i <<", ana val: "<< *(abank+i) << std::endl;
+        std::cout<<j*4<<std::endl;
     }
 
 }
@@ -94,14 +96,12 @@ void PADspace::PADdataVac::getFrame(uint16_t* aframe, uint32_t* dframe)
 {
 
     nextFrame();
-    std::cout<<"bank 1"<<std::endl;
-    getBank(BANK4_OFFSET,9,0,(aframe),(dframe));
-    std::cout<<"bank 2"<<std::endl;
+    getBank(BANK4_OFFSET,9,0,(aframe),(dframe));   // note changed default offset to 0 for analog. - see if readin works with old octave function.
     getBank(BANK2_OFFSET,9,0,(aframe+76),(dframe+76));
-    std::cout<<"bank 3"<<std::endl;
     getBank(BANK3_OFFSET,9,0,(aframe+152),(dframe+152));
-    std::cout<<"bank 4"<<std::endl;
     getBank(BANK1_OFFSET,9,0,(aframe+228),(dframe+228));
+    frameCount++;
+    std::cout<<" Frame number: "<<frameCount<<std::endl;
 
 }
 
@@ -112,6 +112,8 @@ void PADspace::PADdataVac::getFrame(int aoffset, uint16_t* aframe, uint32_t* dfr
     getBank(BANK2_OFFSET,aoffset,0,(aframe+76),(dframe+76));
     getBank(BANK3_OFFSET,aoffset,0,(aframe+152),(dframe+152));
     getBank(BANK1_OFFSET,aoffset,0,(aframe+228),(dframe+228));
+    frameCount++;
+    std::cout<<" Frame number: "<<frameCount<<std::endl;
 
 }
 
@@ -122,5 +124,7 @@ void PADspace::PADdataVac::getFrame(int aoffset, int doffset, uint16_t* aframe, 
     getBank(BANK2_OFFSET,aoffset,doffset,(aframe+76),(dframe+76));
     getBank(BANK3_OFFSET,aoffset,doffset,(aframe+152),(dframe+152));
     getBank(BANK1_OFFSET,aoffset,doffset,(aframe+228),(dframe+228));
+    frameCount++;
+    std::cout<<" Frame number: "<<frameCount<<std::endl;
 
 }
