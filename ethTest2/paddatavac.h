@@ -26,16 +26,13 @@ public:
     Tins::PDU *packetData;
     Tins::PDU::serialization_type inputbuff;
 
-    uint32_t dataA = 0;
-    uint32_t dataB = 0;
-
     int pixbytes = (64+12)*4;
 
-    int getBank(int loc_in_packet ,int analogoffset_in_bank, uint16_t*, uint32_t*);
-    int getBank(int loc_in_packet,int analogoffset_in_bank, int  digitaloffset_in_bank, uint16_t*, uint32_t*);
-    int getFrame(int analogoffset_in_bank, uint16_t*, uint32_t*);
-    int getFrame(int analogoffset_in_bank, int digitaloffset_in_bank, uint16_t*, uint32_t*);
-    int getFrame(uint16_t*, uint32_t*);
+    void getBank(int loc_in_packet ,int analogoffset_in_bank, uint16_t*, uint32_t*);
+    void getBank(int loc_in_packet,int analogoffset_in_bank, int  digitaloffset_in_bank, uint16_t*, uint32_t*);
+    void getFrame(int analogoffset_in_bank, uint16_t*, uint32_t*);
+    void getFrame(int analogoffset_in_bank, int digitaloffset_in_bank, uint16_t*, uint32_t*);
+    void getFrame(uint16_t*, uint32_t*);
     void nextFrame();
 
 };

@@ -3,10 +3,7 @@
 #include<opencv2/highgui.hpp>
 //#include<opencv2/imgproc.hpp>
 //#include<opencv2/imgcodecs.hpp>
-//#include <tins/tins.h>
-//#include <tins/hw_address.h>
-//#include <vector>
-//#include <bitset>
+
 #include "paddatavac.h"
 #include <fstream>
 #include <iostream>
@@ -51,12 +48,11 @@ int main(int argc, char *argv[])
     //cv::waitKey(1);
 
     auto j = 0;
-    int k =0;
 
     while(1)
     {
         std::cout<<"ok2"<<std::endl;
-        k = paddy->getFrame(reinterpret_cast<uint16_t *>(analogDat.data), reinterpret_cast<uint32_t *>(digDat.data));
+        paddy->getFrame(reinterpret_cast<uint16_t *>(analogDat.data), reinterpret_cast<uint32_t *>(digDat.data));
         std::cout<<"ok3"<<std::endl;
 //        cv::convertScaleAbs(analogDat, anaScaled, 255 / 16000);
 //
