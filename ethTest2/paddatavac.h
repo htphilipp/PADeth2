@@ -26,6 +26,8 @@ public:
     Tins::PDU *packetData;
     Tins::PDU::serialization_type inputbuff;
 
+    int frameCount;
+
     int pixbytes = (64+12)*4;
 
     void getBank(int loc_in_packet ,int analogoffset_in_bank, uint16_t*, uint32_t*);
