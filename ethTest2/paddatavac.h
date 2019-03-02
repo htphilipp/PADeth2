@@ -16,6 +16,8 @@ const int BANK2_OFFSET = 81;  // these are the offsets in the received packets t
 const int BANK3_OFFSET = 158; // (235+76)*4 = 1244, reserved packet size: 1257 - check this out
 const int BANK4_OFFSET = 235;
 
+enum class BankMap { RegMap, RevMap };
+
 
 class PADdataVac
 {
@@ -27,9 +29,12 @@ public:
     Tins::PDU::serialization_type inputbuff;
 
     int frameCount;
+    int bmap[76];
+
 
     int pixbytes = (64+12)*4;
 
+    void setBankMap(BankMap);
     void getBank(int loc_in_packet ,int analogoffset_in_bank, uint16_t*, uint32_t*);
     void getBank(int loc_in_packet,int analogoffset_in_bank, int  digitaloffset_in_bank, uint16_t*, uint32_t*);
     void getFrame(int analogoffset_in_bank, uint16_t*, uint32_t*);

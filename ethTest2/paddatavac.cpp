@@ -12,8 +12,9 @@ PADspace::PADdataVac::PADdataVac()
     inputbuff.reserve(1257);
     sniffy = new Tins::Sniffer("eth0",sniffconfig);
     frameCount = 0;
-
+    setBankMap(PADspace::BankMap::RegMap);
 }
+
 
 void PADspace::PADdataVac::getBank(int loc, int aoffsetin, uint16_t *abank, uint32_t *dbank)
 {
@@ -31,14 +32,14 @@ void PADspace::PADdataVac::getBank(int loc, int aoffsetin, uint16_t *abank, uint
     {
         j= loc+(i - aoffset + 76)%76;
         k= loc+i;
-        *(abank+i) = 0;
-        *(dbank+i) = 0;
+        *(abank+bmap[i]) = 0;
+        *(dbank+bmap[i]) = 0;
 
-        *(dbank+i)|=((uint32_t(inputbuff[k*4])&(0x3F))<<10);
-        *(dbank+i)|=((uint32_t(inputbuff[k*4+1]))<<2);
-        *(dbank+i)|=((uint32_t(inputbuff[k*4+2])&(0xC0))>>6);
-        *(abank+i)|=((uint32_t(inputbuff[j*4+2])&(0x3F))<<8);
-        *(abank+i)|=((uint32_t(inputbuff[j*4+3])&0xFF));
+        *(dbank+bmap[i])|=((uint32_t(inputbuff[k*4])&(0x3F))<<10);
+        *(dbank+bmap[i])|=((uint32_t(inputbuff[k*4+1]))<<2);
+        *(dbank+bmap[i])|=((uint32_t(inputbuff[k*4+2])&(0xC0))>>6);
+        *(abank+bmap[i])|=((uint32_t(inputbuff[j*4+2])&(0x3F))<<8);
+        *(abank+bmap[i])|=((uint32_t(inputbuff[j*4+3])&0xFF));
 
        // std::cout<<"j"<< j*4+3 << ", k: "<< k*4+2 << "i: "<< i <<std::endl;
          std::cout<<j*4<<std::endl;
@@ -70,14 +71,14 @@ void PADspace::PADdataVac::getBank(int loc, int aoffsetin, int doffsetin, uint16
         j= loc +(i - aoffset + 76)%76;
         k= loc + (i - doffset + 76)%76;
 
-        *(abank+i) = 0;
-        *(dbank+i) = 0;
+        *(abank+bmap[i]) = 0;
+        *(dbank+bmap[i]) = 0;
 
-        *(dbank+i)|=((uint32_t(inputbuff[k*4])&(0x3F))<<10);
-        *(dbank+i)|=((uint32_t(inputbuff[k*4+1]))<<2);
-        *(dbank+i)|=((uint32_t(inputbuff[k*4+2])&(0xC0))>>6);
-        *(abank+i)|=((uint32_t(inputbuff[j*4+2])&(0x3F))<<8);
-        *(abank+i)|=((uint32_t(inputbuff[j*4+3])&0xFF));
+        *(dbank+bmap[i])|=((uint32_t(inputbuff[k*4])&(0x3F))<<10);
+        *(dbank+bmap[i])|=((uint32_t(inputbuff[k*4+1]))<<2);
+        *(dbank+bmap[i])|=((uint32_t(inputbuff[k*4+2])&(0xC0))>>6);
+        *(abank+bmap[i])|=((uint32_t(inputbuff[j*4+2])&(0x3F))<<8);
+        *(abank+bmap[i])|=((uint32_t(inputbuff[j*4+3])&0xFF));
        //std::cout<<"j"<< j*4+3 << ", k: "<< k*4+2 << "i: "<< i <<", ana val: "<< *(abank+i) << std::endl;
         std::cout<<j*4<<std::endl;
     }
@@ -126,5 +127,26 @@ void PADspace::PADdataVac::getFrame(int aoffset, int doffset, uint16_t* aframe, 
     getBank(BANK1_OFFSET,aoffset,doffset,(aframe+228),(dframe+228));
     frameCount++;
     std::cout<<" Frame number: "<<frameCount<<std::endl;
+
+}
+
+void PADspace::PADdataVac::setBankMap(BankMap bm)
+{
+    int i;
+
+    if(bm == PADspace::BankMap::RegMap)
+    {
+        for(i = 0; i<76; i++)
+        {
+            bmap[i] = (i%4)*19+i/4;
+        }
+    }
+    else if(bm == PADspace::BankMap::RevMap)
+    {
+        for(i = 0; i<76; i++)
+        {
+            bmap[i] = (3-(i%4))*19+i/4;
+        }
+    }
 
 }
