@@ -12,7 +12,7 @@ PADspace::PADdataVac::PADdataVac()
     inputbuff.reserve(1257);
     sniffy = new Tins::Sniffer("eth0",sniffconfig);
     frameCount = 0;
-    setBankMap(PADspace::BankMap::RegMap);
+    setBankMap(PADspace::BankMap::RevMap);
 }
 
 
