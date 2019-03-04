@@ -23,6 +23,7 @@ class PADdataVac
 {
 public:
     PADdataVac();
+    ~PADdataVac();
     Tins::SnifferConfiguration sniffconfig;
     Tins::Sniffer *sniffy;
     Tins::PDU *packetData;
@@ -30,7 +31,7 @@ public:
 
     int frameCount;
     int bmap[76];
-
+    uint32_t digtemp;
 
     int pixbytes = (64+12)*4;
 

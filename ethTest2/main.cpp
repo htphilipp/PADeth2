@@ -30,19 +30,27 @@ int main(int argc, char *argv[])
     if (!outdigital.is_open()) std::cout<<"outdigital.bin not open\n";
 
 
+    double minAn,maxAn;
+    cv::Point minAnP,maxAnP;
+
+
     cv::Mat analogDat;
     //analogDat = cv::Mat::zeros(16,19,int16_t());
-    analogDat = cv::Mat::zeros(19,16,uint16_t());
+    //analogDat = cv::Mat::zeros(19,16,uint16_t());
+    analogDat = cv::Mat::zeros(16,19,CV_16U);
     cv::Mat digDat;
     //digDat = cv::Mat::zeros(16,19,int32_t());
-    digDat = cv::Mat::zeros(19,16,uint32_t());
+    //digDat = cv::Mat::zeros(19,16,uint32_t());
+    digDat = cv::Mat::zeros(16,19,CV_32FC1);
     cv::Mat anaScaled;
     //anaScaled = cv::Mat::zeros(16,19,CV_8UC1);
-    anaScaled = cv::Mat::zeros(19,16,uint16_t());
+    //anaScaled = cv::Mat::zeros(19,16,uint16_t());
+    anaScaled = cv::Mat::zeros(16,19,CV_8U);
 
     cv::Mat digScaled;
     //digScaled = cv::Mat::zeros(16,19,CV_8UC1);
-    digScaled = cv::Mat::zeros(19,16,uint32_t());
+    //digScaled = cv::Mat::zeros(19,16,uint32_t());
+    digScaled = cv::Mat::zeros(16,19,CV_8U);
 
     std::cout<<"starting..."<< std::endl;
 
@@ -59,11 +67,25 @@ int main(int argc, char *argv[])
 
         paddy->getFrame(reinterpret_cast<uint16_t *>(analogDat.data), reinterpret_cast<uint32_t *>(digDat.data));
 
-        if(!(j%5))
+        for(auto xi = 0;xi<16;xi++)
+        {
+            for(auto yi = 0;yi<19;yi++)
+            {
+                std::cout<<analogDat.at<uint16_t>(cv::Point(xi,yi))<<", ";
+            }
+            std::cout<<std::endl;
+        }
+
+
+        if(!(j%2))
         {
             //cv::convertScaleAbs(analogDat, anaScaled, 255 / 1000);
-            cv::convertScaleAbs(analogDat, anaScaled, 255 / 9000);
+            cv::minMaxLoc(analogDat,&minAn,&maxAn,&minAnP,&maxAnP);
+            std::cout<<"min: "<< analogDat.at<uint16_t>(minAnP) <<", max: "<< analogDat.at<uint16_t>(maxAnP)<< std::endl;
 
+            minAn = 1000; maxAn=15000;
+
+            cv::convertScaleAbs(analogDat, anaScaled, 255/(minAn-maxAn),-255*minAn/(maxAn-minAn));
             cv::imshow("analog",anaScaled);
             cv::imshow("digital",digDat);
             if(j==0)

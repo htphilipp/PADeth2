@@ -16,6 +16,14 @@ PADspace::PADdataVac::PADdataVac()
 }
 
 
+PADspace::PADdataVac::~PADdataVac()
+{
+    delete sniffy;
+    delete packetData;
+
+}
+
+
 void PADspace::PADdataVac::getBank(int loc, int aoffsetin, uint16_t *abank, uint32_t *dbank)
 {
     int j;
@@ -33,18 +41,23 @@ void PADspace::PADdataVac::getBank(int loc, int aoffsetin, uint16_t *abank, uint
         j= loc+(i - aoffset + 76)%76;
         k= loc+i;
         *(abank+bmap[i]) = 0;
-        *(dbank+bmap[i]) = 0;
+        //*(dbank+bmap[i]) = 0;
+        digtemp = 0;
 
-        *(dbank+bmap[i])|=((uint32_t(inputbuff[k*4])&(0x3F))<<10);
-        *(dbank+bmap[i])|=((uint32_t(inputbuff[k*4+1]))<<2);
-        *(dbank+bmap[i])|=((uint32_t(inputbuff[k*4+2])&(0xC0))>>6);
+        //*(dbank+bmap[i])|=((uint32_t(inputbuff[k*4])&(0x3F))<<10);
+        //*(dbank+bmap[i])|=((uint32_t(inputbuff[k*4+1]))<<2);
+        //*(dbank+bmap[i])|=((uint32_t(inputbuff[k*4+2])&(0xC0))>>6);
+        digtemp |=((uint32_t(inputbuff[k*4])&(0x3F))<<10);
+        digtemp |=((uint32_t(inputbuff[k*4+1]))<<2);
+        digtemp |=((uint32_t(inputbuff[k*4+2])&(0xC0))>>6);
+
         *(abank+bmap[i])|=((uint32_t(inputbuff[j*4+2])&(0x3F))<<8);
         *(abank+bmap[i])|=((uint32_t(inputbuff[j*4+3])&0xFF));
 
-       // std::cout<<"j"<< j*4+3 << ", k: "<< k*4+2 << "i: "<< i <<std::endl;
-         std::cout<<j*4<<std::endl;
-
+        *(dbank+bmap[i]) = float(digtemp);
     }
+
+     std::cout<<std::endl;
 }
 
 void PADspace::PADdataVac::getBank(int loc, int aoffsetin, int doffsetin, uint16_t *abank, uint32_t *dbank)
@@ -72,17 +85,23 @@ void PADspace::PADdataVac::getBank(int loc, int aoffsetin, int doffsetin, uint16
         k= loc + (i - doffset + 76)%76;
 
         *(abank+bmap[i]) = 0;
-        *(dbank+bmap[i]) = 0;
+        //*(dbank+bmap[i]) = 0;
+        digtemp = 0;
 
-        *(dbank+bmap[i])|=((uint32_t(inputbuff[k*4])&(0x3F))<<10);
-        *(dbank+bmap[i])|=((uint32_t(inputbuff[k*4+1]))<<2);
-        *(dbank+bmap[i])|=((uint32_t(inputbuff[k*4+2])&(0xC0))>>6);
+
+        //*(dbank+bmap[i])|=((uint32_t(inputbuff[k*4])&(0x3F))<<10);
+        //*(dbank+bmap[i])|=((uint32_t(inputbuff[k*4+1]))<<2);
+        //*(dbank+bmap[i])|=((uint32_t(inputbuff[k*4+2])&(0xC0))>>6);
+        digtemp |=((uint32_t(inputbuff[k*4])&(0x3F))<<10);
+        digtemp |=((uint32_t(inputbuff[k*4+1]))<<2);
+        digtemp |=((uint32_t(inputbuff[k*4+2])&(0xC0))>>6);
+
         *(abank+bmap[i])|=((uint32_t(inputbuff[j*4+2])&(0x3F))<<8);
         *(abank+bmap[i])|=((uint32_t(inputbuff[j*4+3])&0xFF));
-       //std::cout<<"j"<< j*4+3 << ", k: "<< k*4+2 << "i: "<< i <<", ana val: "<< *(abank+i) << std::endl;
-        std::cout<<j*4<<std::endl;
-    }
+        *(dbank+bmap[i]) = float(digtemp);
 
+    }
+    std::cout<<std::endl;
 }
 
 
