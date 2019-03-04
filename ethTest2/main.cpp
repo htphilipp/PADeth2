@@ -35,21 +35,13 @@ int main(int argc, char *argv[])
 
 
     cv::Mat analogDat;
-    //analogDat = cv::Mat::zeros(16,19,int16_t());
-    //analogDat = cv::Mat::zeros(19,16,uint16_t());
     analogDat = cv::Mat::zeros(16,19,CV_16U);
     cv::Mat digDat;
-    //digDat = cv::Mat::zeros(16,19,int32_t());
-    //digDat = cv::Mat::zeros(19,16,uint32_t());
     digDat = cv::Mat::zeros(16,19,CV_32FC1);
     cv::Mat anaScaled;
-    //anaScaled = cv::Mat::zeros(16,19,CV_8UC1);
-    //anaScaled = cv::Mat::zeros(19,16,uint16_t());
     anaScaled = cv::Mat::zeros(16,19,CV_8U);
 
     cv::Mat digScaled;
-    //digScaled = cv::Mat::zeros(16,19,CV_8UC1);
-    //digScaled = cv::Mat::zeros(19,16,uint32_t());
     digScaled = cv::Mat::zeros(16,19,CV_8U);
 
     std::cout<<"starting..."<< std::endl;
@@ -67,9 +59,9 @@ int main(int argc, char *argv[])
 
         paddy->getFrame(reinterpret_cast<uint16_t *>(analogDat.data), reinterpret_cast<uint32_t *>(digDat.data));
 
-        for(auto xi = 0;xi<16;xi++)
+        for(auto xi = 0;xi<19;xi++)
         {
-            for(auto yi = 0;yi<19;yi++)
+            for(auto yi = 0;yi<16;yi++)
             {
                 std::cout<<analogDat.at<uint16_t>(cv::Point(xi,yi))<<", ";
             }
