@@ -24,7 +24,7 @@ PADspace::PADdataVac::~PADdataVac()
 }
 
 
-void PADspace::PADdataVac::getBank(int loc, int aoffsetin, uint16_t *abank, uint32_t *dbank)
+void PADspace::PADdataVac::getBank(int loc, int aoffsetin, uint16_t *abank, uint16_t *dbank)
 {
     int j;
     int k;
@@ -47,20 +47,21 @@ void PADspace::PADdataVac::getBank(int loc, int aoffsetin, uint16_t *abank, uint
         //*(dbank+bmap[i])|=((uint32_t(inputbuff[k*4])&(0x3F))<<10);
         //*(dbank+bmap[i])|=((uint32_t(inputbuff[k*4+1]))<<2);
         //*(dbank+bmap[i])|=((uint32_t(inputbuff[k*4+2])&(0xC0))>>6);
-        digtemp |=((uint32_t(inputbuff[k*4])&(0x3F))<<10);
-        digtemp |=((uint32_t(inputbuff[k*4+1]))<<2);
-        digtemp |=((uint32_t(inputbuff[k*4+2])&(0xC0))>>6);
+        digtemp |=((uint16_t(inputbuff[k*4])&(0x3F))<<10);
+        digtemp |=((uint16_t(inputbuff[k*4+1]))<<2);
+        digtemp |=((uint16_t(inputbuff[k*4+2])&(0xC0))>>6);
 
-        *(abank+bmap[i])|=((uint32_t(inputbuff[j*4+2])&(0x3F))<<8);
-        *(abank+bmap[i])|=((uint32_t(inputbuff[j*4+3])&0xFF));
+        *(abank+bmap[i])|=((uint16_t(inputbuff[j*4+2])&(0x3F))<<8);
+        *(abank+bmap[i])|=((uint16_t(inputbuff[j*4+3])&0xFF));
 
-        *(dbank+bmap[i]) = float(digtemp);
+        //*(dbank+bmap[i]) = float(digtemp);
+        *(dbank+bmap[i]) = (digtemp);
     }
 
-     std::cout<<std::endl;
+    // std::cout<<std::endl;
 }
 
-void PADspace::PADdataVac::getBank(int loc, int aoffsetin, int doffsetin, uint16_t *abank, uint32_t *dbank)
+void PADspace::PADdataVac::getBank(int loc, int aoffsetin, int doffsetin, uint16_t *abank, uint16_t *dbank)
 {
     int j;
     int k;
@@ -92,13 +93,14 @@ void PADspace::PADdataVac::getBank(int loc, int aoffsetin, int doffsetin, uint16
         //*(dbank+bmap[i])|=((uint32_t(inputbuff[k*4])&(0x3F))<<10);
         //*(dbank+bmap[i])|=((uint32_t(inputbuff[k*4+1]))<<2);
         //*(dbank+bmap[i])|=((uint32_t(inputbuff[k*4+2])&(0xC0))>>6);
-        digtemp |=((uint32_t(inputbuff[k*4])&(0x3F))<<10);
-        digtemp |=((uint32_t(inputbuff[k*4+1]))<<2);
-        digtemp |=((uint32_t(inputbuff[k*4+2])&(0xC0))>>6);
+        digtemp |=((uint16_t(inputbuff[k*4])&(0x3F))<<10);
+        digtemp |=((uint16_t(inputbuff[k*4+1]))<<2);
+        digtemp |=((uint16_t(inputbuff[k*4+2])&(0xC0))>>6);
 
-        *(abank+bmap[i])|=((uint32_t(inputbuff[j*4+2])&(0x3F))<<8);
-        *(abank+bmap[i])|=((uint32_t(inputbuff[j*4+3])&0xFF));
-        *(dbank+bmap[i]) = float(digtemp);
+        *(abank+bmap[i])|=((uint16_t(inputbuff[j*4+2])&(0x3F))<<8);
+        *(abank+bmap[i])|=((uint16_t(inputbuff[j*4+3])&0xFF));
+        //*(dbank+bmap[i]) = float(digtemp);
+        *(dbank+bmap[i]) = (digtemp);
 
     }
     std::cout<<std::endl;
@@ -112,7 +114,7 @@ void PADspace::PADdataVac::nextFrame()
      inputbuff  =   packetData->serialize();
 }
 
-void PADspace::PADdataVac::getFrame(uint16_t* aframe, uint32_t* dframe)
+void PADspace::PADdataVac::getFrame(uint16_t* aframe, uint16_t* dframe)
 {
 
     nextFrame();
@@ -121,11 +123,11 @@ void PADspace::PADdataVac::getFrame(uint16_t* aframe, uint32_t* dframe)
     getBank(BANK3_OFFSET,9,0,(aframe+152),(dframe+152));
     getBank(BANK1_OFFSET,9,0,(aframe+228),(dframe+228));
     frameCount++;
-    std::cout<<" Frame number: "<<frameCount<<std::endl;
+    //std::cout<<" Frame number: "<<frameCount<<std::endl;
 
 }
 
-void PADspace::PADdataVac::getFrame(int aoffset, uint16_t* aframe, uint32_t* dframe)
+void PADspace::PADdataVac::getFrame(int aoffset, uint16_t* aframe, uint16_t* dframe)
 {
     nextFrame();
     getBank(BANK4_OFFSET,aoffset,0,(aframe),(dframe));
@@ -133,11 +135,11 @@ void PADspace::PADdataVac::getFrame(int aoffset, uint16_t* aframe, uint32_t* dfr
     getBank(BANK3_OFFSET,aoffset,0,(aframe+152),(dframe+152));
     getBank(BANK1_OFFSET,aoffset,0,(aframe+228),(dframe+228));
     frameCount++;
-    std::cout<<" Frame number: "<<frameCount<<std::endl;
+    //std::cout<<" Frame number: "<<frameCount<<std::endl;
 
 }
 
-void PADspace::PADdataVac::getFrame(int aoffset, int doffset, uint16_t* aframe, uint32_t* dframe)
+void PADspace::PADdataVac::getFrame(int aoffset, int doffset, uint16_t* aframe, uint16_t* dframe)
 {
     nextFrame();
     getBank(BANK4_OFFSET,aoffset,doffset,(aframe),(dframe));
@@ -145,7 +147,7 @@ void PADspace::PADdataVac::getFrame(int aoffset, int doffset, uint16_t* aframe, 
     getBank(BANK3_OFFSET,aoffset,doffset,(aframe+152),(dframe+152));
     getBank(BANK1_OFFSET,aoffset,doffset,(aframe+228),(dframe+228));
     frameCount++;
-    std::cout<<" Frame number: "<<frameCount<<std::endl;
+   // std::cout<<" Frame number: "<<frameCount<<std::endl;
 
 }
 

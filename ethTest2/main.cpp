@@ -37,7 +37,7 @@ int main(int argc, char *argv[])
     cv::Mat analogDat;
     analogDat = cv::Mat::zeros(16,19,CV_16U);
     cv::Mat digDat;
-    digDat = cv::Mat::zeros(16,19,CV_32FC1);
+    digDat = cv::Mat::zeros(16,19,CV_16U);
     cv::Mat anaScaled;
     anaScaled = cv::Mat::zeros(16,19,CV_8U);
 
@@ -57,23 +57,23 @@ int main(int argc, char *argv[])
 
         j++;
 
-        paddy->getFrame(reinterpret_cast<uint16_t *>(analogDat.data), reinterpret_cast<uint32_t *>(digDat.data));
+        paddy->getFrame(reinterpret_cast<uint16_t *>(analogDat.data), reinterpret_cast<uint16_t *>(digDat.data));
 
-        for(auto xi = 0;xi<19;xi++)
-        {
-            for(auto yi = 0;yi<16;yi++)
-            {
-                std::cout<<analogDat.at<uint16_t>(cv::Point(xi,yi))<<", ";
-            }
-            std::cout<<std::endl;
-        }
+//        for(auto xi = 0;xi<19;xi++)
+//        {
+//            for(auto yi = 0;yi<16;yi++)
+//            {
+//                std::cout<<analogDat.at<uint16_t>(cv::Point(xi,yi))<<", ";
+//            }
+//            std::cout<<std::endl;
+//        }
 
 
-        if(!(j%2))
+        if(!(j%10))
         {
             //cv::convertScaleAbs(analogDat, anaScaled, 255 / 1000);
             cv::minMaxLoc(analogDat,&minAn,&maxAn,&minAnP,&maxAnP);
-            std::cout<<"min: "<< analogDat.at<uint16_t>(minAnP) <<", max: "<< analogDat.at<uint16_t>(maxAnP)<< std::endl;
+            //std::cout<<"min: "<< analogDat.at<uint16_t>(minAnP) <<", max: "<< analogDat.at<uint16_t>(maxAnP)<< std::endl;
 
             minAn = 1000; maxAn=15000;
 
@@ -89,7 +89,7 @@ int main(int argc, char *argv[])
             cv::waitKey(5);
         }
         outanalog.write(const_cast<char *>(reinterpret_cast<char *>(analogDat.data)),sizeof(uint16_t)*16*19);
-        outdigital.write(const_cast<char *>(reinterpret_cast<char *>(digDat.data)),sizeof(uint32_t)*16*19);
+        outdigital.write(const_cast<char *>(reinterpret_cast<char *>(digDat.data)),sizeof(uint16_t)*16*19);
 
         outanalog.flush();
         outdigital.flush();

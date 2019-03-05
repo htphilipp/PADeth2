@@ -36,11 +36,11 @@ public:
     int pixbytes = (64+12)*4;
 
     void setBankMap(BankMap);
-    void getBank(int loc_in_packet ,int analogoffset_in_bank, uint16_t*, uint32_t*);
-    void getBank(int loc_in_packet,int analogoffset_in_bank, int  digitaloffset_in_bank, uint16_t*, uint32_t*);
-    void getFrame(int analogoffset_in_bank, uint16_t*, uint32_t*);
-    void getFrame(int analogoffset_in_bank, int digitaloffset_in_bank, uint16_t*, uint32_t*);
-    void getFrame(uint16_t*, uint32_t*);
+    void getBank(int loc_in_packet ,int analogoffset_in_bank, uint16_t*, uint16_t*);
+    void getBank(int loc_in_packet,int analogoffset_in_bank, int  digitaloffset_in_bank, uint16_t*, uint16_t*);
+    void getFrame(int analogoffset_in_bank, uint16_t*, uint16_t*);
+    void getFrame(int analogoffset_in_bank, int digitaloffset_in_bank, uint16_t*, uint16_t*);
+    void getFrame(uint16_t*, uint16_t*);
     void nextFrame();
 
 };
