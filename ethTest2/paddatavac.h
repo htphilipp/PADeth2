@@ -1,3 +1,12 @@
+//This software is used to collect data from small scale pixel array detector prototypes.
+//It requires the Qt (not really but it's there), libtins, and opencv libraries.
+//Version 0.01 Super Beta-, Hugh Philipp 2019_03_06, Cornell University
+
+//If bugs are found, please inform me so I can fix the code.
+//If code is copied or modified and used elsewhere, please note its origin.
+
+
+
 #ifndef PADDATAVAC_H
 #define PADDATAVAC_H
 
@@ -23,6 +32,7 @@ class PADdataVac
 {
 public:
     PADdataVac();
+    PADdataVac(BankMap);
     ~PADdataVac();
     Tins::SnifferConfiguration sniffconfig;
     Tins::Sniffer *sniffy;
