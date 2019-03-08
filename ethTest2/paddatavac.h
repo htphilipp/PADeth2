@@ -48,9 +48,12 @@ public:
     void setBankMap(BankMap);
     void getBank(int loc_in_packet ,int analogoffset_in_bank, uint16_t*, uint16_t*);
     void getBank(int loc_in_packet,int analogoffset_in_bank, int  digitaloffset_in_bank, uint16_t*, uint16_t*);
+    void getBankGain(int loc_in_packet, int  digitaloffset_in_bank, uint8_t*);
+
     void getFrame(int analogoffset_in_bank, uint16_t*, uint16_t*);
     void getFrame(int analogoffset_in_bank, int digitaloffset_in_bank, uint16_t*, uint16_t*);
     void getFrame(uint16_t*, uint16_t*);
+    void getFrame(uint16_t*, uint16_t*,uint8_t*,int = 9, int = 12);
     void nextFrame();
 
 };

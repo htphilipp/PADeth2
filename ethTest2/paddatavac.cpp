@@ -125,7 +125,32 @@ void PADspace::PADdataVac::getBank(int loc, int aoffsetin, int doffsetin, uint16
         *(dbank+bmap[i]) = (digtemp);
 
     }
-    std::cout<<std::endl;
+   // std::cout<<std::endl;
+}
+
+void PADspace::PADdataVac::getBankGain(int loc, int doffsetin, uint8_t *gbank)
+{
+    int k;
+
+    int doffset;
+    doffset = doffsetin;
+
+    if((doffset>75)||(doffset<0))
+    {
+        doffset = 0;
+    }
+
+
+    for(auto i = 0; i< 76; i++)
+    {
+        k= loc + (i - doffset + 76)%76;
+
+        *(gbank+bmap[i]) = 0;
+
+        *(gbank+bmap[i]) |=((uint8_t(inputbuff[k*4])&(0x80))>>7);
+
+    }
+    //std::cout<<std::endl;
 }
 
 
@@ -140,10 +165,38 @@ void PADspace::PADdataVac::getFrame(uint16_t* aframe, uint16_t* dframe)
 {
 
     nextFrame();
-    getBank(BANK4_OFFSET,9,0,(aframe),(dframe));   // note changed default offset to 0 for analog. - see if readin works with old octave function.
+//    getBank(BANK4_OFFSET,9,0,(aframe),(dframe));   // note changed default offset to 0 for analog. - see if readin works with old octave function.
+//    getBank(BANK2_OFFSET,9,0,(aframe+76),(dframe+76));
+//    getBank(BANK3_OFFSET,9,0,(aframe+152),(dframe+152));
+//    getBank(BANK1_OFFSET,9,0,(aframe+228),(dframe+228));
+    getBank(BANK4_OFFSET,9,0,(aframe),(dframe+228));   // note changed default offset to 0 for analog. - see if readin works with old octave function.
     getBank(BANK2_OFFSET,9,0,(aframe+76),(dframe+76));
     getBank(BANK3_OFFSET,9,0,(aframe+152),(dframe+152));
-    getBank(BANK1_OFFSET,9,0,(aframe+228),(dframe+228));
+    getBank(BANK1_OFFSET,9,0,(aframe+228),(dframe));
+
+    frameCount++;
+    //std::cout<<" Frame number: "<<frameCount<<std::endl;
+
+}
+
+void PADspace::PADdataVac::getFrame(uint16_t* aframe, uint16_t* dframe, uint8_t* gframe,int aoffset, int doffset)
+{
+
+    nextFrame();
+//    getBank(BANK4_OFFSET,aoffset,doffset,(aframe),(dframe));   // note changed default offset to 0 for analog. - see if readin works with old octave function.
+//    getBank(BANK2_OFFSET,aoffset,doffset,(aframe+76),(dframe+76));
+//    getBank(BANK3_OFFSET,aoffset,doffset,(aframe+152),(dframe+152));
+//    getBank(BANK1_OFFSET,aoffset,doffset,(aframe+228),(dframe+228));
+    getBank(BANK4_OFFSET,9,doffset,(aframe),(dframe+228));   // note changed default offset to 0 for analog. - see if readin works with old octave function.
+    getBank(BANK2_OFFSET,9,doffset,(aframe+76),(dframe+76));
+    getBank(BANK3_OFFSET,9,doffset,(aframe+152),(dframe+152));
+    getBank(BANK1_OFFSET,9,doffset,(aframe+228),(dframe));
+
+    getBankGain(BANK4_OFFSET,doffset,(gframe+228));
+    getBankGain(BANK2_OFFSET,doffset,(gframe+76));
+    getBankGain(BANK3_OFFSET,doffset,(gframe+152));
+    getBankGain(BANK1_OFFSET,doffset,(gframe));
+
     frameCount++;
     //std::cout<<" Frame number: "<<frameCount<<std::endl;
 
@@ -152,10 +205,14 @@ void PADspace::PADdataVac::getFrame(uint16_t* aframe, uint16_t* dframe)
 void PADspace::PADdataVac::getFrame(int aoffset, uint16_t* aframe, uint16_t* dframe)
 {
     nextFrame();
-    getBank(BANK4_OFFSET,aoffset,0,(aframe),(dframe));
-    getBank(BANK2_OFFSET,aoffset,0,(aframe+76),(dframe+76));
-    getBank(BANK3_OFFSET,aoffset,0,(aframe+152),(dframe+152));
-    getBank(BANK1_OFFSET,aoffset,0,(aframe+228),(dframe+228));
+//    getBank(BANK4_OFFSET,aoffset,0,(aframe),(dframe));
+//    getBank(BANK2_OFFSET,aoffset,0,(aframe+76),(dframe+76));
+//    getBank(BANK3_OFFSET,aoffset,0,(aframe+152),(dframe+152));
+//    getBank(BANK1_OFFSET,aoffset,0,(aframe+228),(dframe+228));
+    getBank(BANK4_OFFSET,9,0,(aframe),(dframe+228));   // note changed default offset to 0 for analog. - see if readin works with old octave function.
+    getBank(BANK2_OFFSET,9,0,(aframe+76),(dframe+76));
+    getBank(BANK3_OFFSET,9,0,(aframe+152),(dframe+152));
+    getBank(BANK1_OFFSET,9,0,(aframe+228),(dframe));
     frameCount++;
     //std::cout<<" Frame number: "<<frameCount<<std::endl;
 
@@ -164,10 +221,14 @@ void PADspace::PADdataVac::getFrame(int aoffset, uint16_t* aframe, uint16_t* dfr
 void PADspace::PADdataVac::getFrame(int aoffset, int doffset, uint16_t* aframe, uint16_t* dframe)
 {
     nextFrame();
-    getBank(BANK4_OFFSET,aoffset,doffset,(aframe),(dframe));
-    getBank(BANK2_OFFSET,aoffset,doffset,(aframe+76),(dframe+76));
-    getBank(BANK3_OFFSET,aoffset,doffset,(aframe+152),(dframe+152));
-    getBank(BANK1_OFFSET,aoffset,doffset,(aframe+228),(dframe+228));
+//    getBank(BANK4_OFFSET,aoffset,doffset,(aframe),(dframe));
+//    getBank(BANK2_OFFSET,aoffset,doffset,(aframe+76),(dframe+76));
+//    getBank(BANK3_OFFSET,aoffset,doffset,(aframe+152),(dframe+152));
+//    getBank(BANK1_OFFSET,aoffset,doffset,(aframe+228),(dframe+228));
+    getBank(BANK4_OFFSET,9,0,(aframe),(dframe+228));   // note changed default offset to 0 for analog. - see if readin works with old octave function.
+    getBank(BANK2_OFFSET,9,0,(aframe+76),(dframe+76));
+    getBank(BANK3_OFFSET,9,0,(aframe+152),(dframe+152));
+    getBank(BANK1_OFFSET,9,0,(aframe+228),(dframe));
     frameCount++;
    // std::cout<<" Frame number: "<<frameCount<<std::endl;
 
