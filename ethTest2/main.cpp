@@ -19,6 +19,9 @@ If code is copied or modified and used elsewhere, please note its origin.
 #include <iostream>
 #include <string>
 
+void onMouse(int, int, int , int, void*);
+
+
 int main(int argc, char *argv[])
 {
 
@@ -125,9 +128,14 @@ int main(int argc, char *argv[])
     std::cout<<"starting..."<< std::endl;
 
     //display windows
-    cv::namedWindow("analog", cv::WINDOW_NORMAL);
-    cv::namedWindow("digital",cv::WINDOW_NORMAL);
-    cv::namedWindow("gain",cv::WINDOW_NORMAL);
+    //    cv::namedWindow("analog", cv::WINDOW_NORMAL);
+    //    cv::namedWindow("digital",cv::WINDOW_NORMAL);
+    //    cv::namedWindow("gain",cv::WINDOW_NORMAL);
+    cv::namedWindow("analog", cv::WINDOW_GUI_NORMAL);
+    cv::namedWindow("digital",cv::WINDOW_GUI_NORMAL);
+    cv::namedWindow("gain",cv::WINDOW_GUI_NORMAL);
+    cv::setMouseCallback("analog", onMouse, (void*)&analogDat);
+
     cv::waitKey(1);
 
     auto j = 0; // variable used to count frames and decide if frame will be displayed - so j mod something in the loop so every frame isn't displayed
@@ -200,4 +208,35 @@ int main(int argc, char *argv[])
 
     delete paddy;
     return a.exec();
+   // return 1;
 }
+
+
+
+void onMouse(int event, int x, int y, int flags, void* param)
+{
+    char text[100];
+    cv::Mat img2;
+    uint16_t p;
+
+    img2 = (reinterpret_cast<cv::Mat *>(param))->clone();
+
+    if (event == CV_EVENT_LBUTTONDOWN)
+    {
+
+        p = img2.at<uint16_t>(y,x);
+        sprintf(text, "x=%d, y=%d, v=%d", x, y, p);
+        cv::putText(img2, text, cv::Point(3,3), cv::FONT_HERSHEY_PLAIN, 1.0, CV_RGB(0,255,0));
+        cv::imshow("image", img2);
+        std::cout<<text<<std::endl;
+    }
+    else if (event == CV_EVENT_RBUTTONDOWN)
+    {
+        cv::imshow("image", img2);
+        std::cout<<"rbutton"<<std::endl;
+    }
+}
+
+
+
+
