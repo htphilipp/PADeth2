@@ -18,9 +18,10 @@ If code is copied or modified and used elsewhere, please note its origin.
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <future>
 
 void onMouse(int, int, int , int, void*);
-
+int  padDisp(cv::Mat&,cv::Mat&,cv::Mat&);
 
 int main(int argc, char *argv[])
 {
@@ -138,6 +139,8 @@ int main(int argc, char *argv[])
 
     cv::waitKey(1);
 
+    //auto dispFut = std::async(std::launch::async,padDisp,&analogDat,&digDat,&gainDat); // Stupid outdated libs don't have std::async
+
     auto j = 0; // variable used to count frames and decide if frame will be displayed - so j mod something in the loop so every frame isn't displayed
 
     while(1)
@@ -238,5 +241,12 @@ void onMouse(int event, int x, int y, int flags, void* param)
 }
 
 
+int  padDisp(cv::Mat& ,cv::Mat&,cv::Mat&)
+{
+
+
+    return 1;
+
+}
 
 
