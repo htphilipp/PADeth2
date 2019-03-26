@@ -5,6 +5,7 @@ Version 0.01 Super Beta-, Hugh Philipp 2019_03_06, Cornell University
 
 If bugs are found, please inform me so I can fix the code.
 If code is copied or modified and used elsewhere, please note its origin.
+updating identity
 */
 
 
