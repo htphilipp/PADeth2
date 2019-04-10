@@ -1,3 +1,12 @@
+//This software is used to collect data from small scale pixel array detector prototypes.
+//It requires the Qt (not really but it's there), libtins, and opencv libraries.
+//Version 0.01 Super Beta-, Hugh Philipp 2019_03_06, Cornell University
+
+//If bugs are found, please inform me so I can fix the code.
+//If code is copied or modified and used elsewhere, please note its origin.
+
+// updating identity
+
 #ifndef PADDATAVAC_H
 #define PADDATAVAC_H
 
@@ -23,6 +32,8 @@ class PADdataVac
 {
 public:
     PADdataVac();
+    PADdataVac(BankMap);
+    ~PADdataVac();
     Tins::SnifferConfiguration sniffconfig;
     Tins::Sniffer *sniffy;
     Tins::PDU *packetData;
@@ -30,16 +41,19 @@ public:
 
     int frameCount;
     int bmap[76];
-
+    uint32_t digtemp;
 
     int pixbytes = (64+12)*4;
 
     void setBankMap(BankMap);
-    void getBank(int loc_in_packet ,int analogoffset_in_bank, uint16_t*, uint32_t*);
-    void getBank(int loc_in_packet,int analogoffset_in_bank, int  digitaloffset_in_bank, uint16_t*, uint32_t*);
-    void getFrame(int analogoffset_in_bank, uint16_t*, uint32_t*);
-    void getFrame(int analogoffset_in_bank, int digitaloffset_in_bank, uint16_t*, uint32_t*);
-    void getFrame(uint16_t*, uint32_t*);
+    void getBank(int loc_in_packet ,int analogoffset_in_bank, uint16_t*, uint16_t*);
+    void getBank(int loc_in_packet,int analogoffset_in_bank, int  digitaloffset_in_bank, uint16_t*, uint16_t*);
+    void getBankGain(int loc_in_packet, int  digitaloffset_in_bank, uint8_t*);
+
+    void getFrame(int analogoffset_in_bank, uint16_t*, uint16_t*);
+    void getFrame(int analogoffset_in_bank, int digitaloffset_in_bank, uint16_t*, uint16_t*);
+    void getFrame(uint16_t*, uint16_t*);
+    void getFrame(uint16_t*, uint16_t*,uint8_t*,int = 9, int = 12);
     void nextFrame();
 
 };
