@@ -25,7 +25,7 @@ const int BANK2_OFFSET = 81;  // these are the offsets in the received packets t
 const int BANK3_OFFSET = 158; // (235+76)*4 = 1244, reserved packet size: 1257 - check this out
 const int BANK4_OFFSET = 235;
 
-enum class BankMap { RegMap, RevMap };
+enum class BankMap { RegMap, RevMap, RevMapfours, RevMapones, RevMaptwos,RevMapthrees };
 
 
 class PADdataVac
@@ -40,19 +40,21 @@ public:
     Tins::PDU::serialization_type inputbuff;
 
     int frameCount;
-    int bmap[76];
+    int bmap[76]; //bank map for digital
+    int bmapA[76]; //bank map for analog
     uint32_t digtemp;
 
     int pixbytes = (64+12)*4;
 
-    void setBankMap(BankMap);
+    void setBankMap(BankMap); //set digital Bank Map
+    void setBankMapA(BankMap); //set analog bank Map
     void getBank(int loc_in_packet ,int analogoffset_in_bank, uint16_t*, uint16_t*);
     void getBank(int loc_in_packet,int analogoffset_in_bank, int  digitaloffset_in_bank, uint16_t*, uint16_t*);
     void getBankGain(int loc_in_packet, int  digitaloffset_in_bank, uint8_t*);
 
-    void getFrame(int analogoffset_in_bank, uint16_t*, uint16_t*);
-    void getFrame(int analogoffset_in_bank, int digitaloffset_in_bank, uint16_t*, uint16_t*);
-    void getFrame(uint16_t*, uint16_t*);
+   // void getFrame(int analogoffset_in_bank, uint16_t*, uint16_t*);
+   // void getFrame(int analogoffset_in_bank, int digitaloffset_in_bank, uint16_t*, uint16_t*);
+   // void getFrame(uint16_t*, uint16_t*);
     void getFrame(uint16_t*, uint16_t*,uint8_t*,int = 9, int = 12);
     void nextFrame();
 

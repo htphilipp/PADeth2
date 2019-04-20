@@ -27,7 +27,7 @@ int  padDisp(cv::Mat&,cv::Mat&,cv::Mat&);
 int main(int argc, char *argv[])
 {
 
-    QCoreApplication a(argc, argv);
+    //QCoreApplication a(argc, argv);
 
     std::cout<<"starting1..."<< std::endl;
     PADspace::PADdataVac *paddy;
@@ -148,8 +148,9 @@ int main(int argc, char *argv[])
     {
 
         j++;
-
-        paddy->getFrame(reinterpret_cast<uint16_t *>(analogDat.data), reinterpret_cast<uint16_t *>(digDat.data),reinterpret_cast<uint8_t *>(gainDat.data));
+        // note: optional parameters can be appended to get frame analog offset (default 9) and digital offset (default 12).
+        // - Note function declaration:  void getFrame(uint16_t*, uint16_t*,uint8_t*,int = 9, int = 12);
+        paddy->getFrame(reinterpret_cast<uint16_t *>(analogDat.data), reinterpret_cast<uint16_t *>(digDat.data),reinterpret_cast<uint8_t *>(gainDat.data),5);
 // -------------------------------------------------------
 //   This was just a debugging loop to display pixel values
 //        for(auto xi = 0;xi<19;xi++)
@@ -211,8 +212,8 @@ int main(int argc, char *argv[])
     outgain.close();
 
     delete paddy;
-    return a.exec();
-   // return 1;
+    //return a.exec();
+    return 1;
 }
 
 
@@ -225,7 +226,7 @@ void onMouse(int event, int x, int y, int flags, void* param)
 
     img2 = (reinterpret_cast<cv::Mat *>(param))->clone();
 
-    if (event == CV_EVENT_LBUTTONDOWN)
+    if (event == cv::EVENT_LBUTTONDOWN)
     {
 
         p = img2.at<uint16_t>(y,x);
@@ -234,7 +235,7 @@ void onMouse(int event, int x, int y, int flags, void* param)
         cv::imshow("image", img2);
         std::cout<<text<<std::endl;
     }
-    else if (event == CV_EVENT_RBUTTONDOWN)
+    else if (event == cv::EVENT_RBUTTONDOWN)
     {
         cv::imshow("image", img2);
         std::cout<<"rbutton"<<std::endl;
